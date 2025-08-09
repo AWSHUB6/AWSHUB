@@ -8,56 +8,74 @@ local function showLoadingScreen()
     screenGui.Name = "AWSHubLoadingScreen"
     screenGui.Parent = playerGui
 
+    -- Full screen dark green background
     local bg = Instance.new("Frame", screenGui)
     bg.Size = UDim2.new(1, 0, 1, 0)
-    bg.BackgroundColor3 = Color3.fromRGB(0, 150, 0) -- green background
+    bg.Position = UDim2.new(0, 0, 0, 0)
+    bg.BackgroundColor3 = Color3.fromRGB(0, 50, 0) -- dark green
+    bg.BorderSizePixel = 0
 
+    -- Title text
     local title = Instance.new("TextLabel", bg)
     title.Size = UDim2.new(0, 400, 0, 50)
-    title.Position = UDim2.new(0.5, -200, 0.4, -25)
+    title.Position = UDim2.new(0.5, -200, 0.35, 0)
     title.BackgroundTransparency = 1
-    title.Font = Enum.Font.SourceSansBold
-    title.TextSize = 36
-    title.TextColor3 = Color3.fromRGB(0, 0, 0)
+    title.Font = Enum.Font.FredokaOne
+    title.TextSize = 40
+    title.TextColor3 = Color3.fromRGB(255, 255, 255) -- white text
     title.Text = "AWSHUB"
+    title.TextStrokeTransparency = 0.5
+    title.TextStrokeColor3 = Color3.new(0, 0, 0)
+    title.TextScaled = true
 
+    -- Progress bar background (black)
     local progressBg = Instance.new("Frame", bg)
-    progressBg.Size = UDim2.new(0, 400, 0, 20)
-    progressBg.Position = UDim2.new(0.5, -200, 0.5, 0)
-    progressBg.BackgroundColor3 = Color3.fromRGB(0, 100, 0)
+    progressBg.Size = UDim2.new(0, 450, 0, 30)
+    progressBg.Position = UDim2.new(0.5, -225, 0.5, 0)
+    progressBg.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
     progressBg.BorderSizePixel = 0
     progressBg.ClipsDescendants = true
+    local progressBgCorner = Instance.new("UICorner", progressBg)
+    progressBgCorner.CornerRadius = UDim.new(0, 15)
 
+    -- Progress bar fill (bright green)
     local progressFill = Instance.new("Frame", progressBg)
     progressFill.Size = UDim2.new(0, 0, 1, 0)
     progressFill.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
+    progressFill.BorderSizePixel = 0
+    local progressFillCorner = Instance.new("UICorner", progressFill)
+    progressFillCorner.CornerRadius = UDim.new(0, 15)
 
+    -- Status text (white)
     local statusText = Instance.new("TextLabel", bg)
-    statusText.Size = UDim2.new(0, 400, 0, 90)
-    statusText.Position = UDim2.new(0.5, -200, 0.55, 15)
+    statusText.Size = UDim2.new(0, 450, 0, 80)
+    statusText.Position = UDim2.new(0.5, -225, 0.58, 0)
     statusText.BackgroundTransparency = 1
-    statusText.Font = Enum.Font.SourceSans
-    statusText.TextSize = 18
-    statusText.TextColor3 = Color3.fromRGB(0, 0, 0)
+    statusText.Font = Enum.Font.SourceSansBold
+    statusText.TextSize = 20
+    statusText.TextColor3 = Color3.fromRGB(255, 255, 255)
     statusText.TextWrapped = true
+    statusText.TextYAlignment = Enum.TextYAlignment.Top
     statusText.Text = "Loading Duper...\nEgg Predictor...\nMutation..."
 
+    -- Percent text (white)
     local percentText = Instance.new("TextLabel", bg)
-    percentText.Size = UDim2.new(0, 400, 0, 30)
-    percentText.Position = UDim2.new(0.5, -200, 0.7, 10)
+    percentText.Size = UDim2.new(0, 450, 0, 30)
+    percentText.Position = UDim2.new(0.5, -225, 0.77, 0)
     percentText.BackgroundTransparency = 1
     percentText.Font = Enum.Font.SourceSans
-    percentText.TextSize = 14
-    percentText.TextColor3 = Color3.fromRGB(0, 0, 0)
+    percentText.TextSize = 18
+    percentText.TextColor3 = Color3.fromRGB(255, 255, 255)
     percentText.Text = "0%"
 
+    -- Estimated time text (white)
     local timeText = Instance.new("TextLabel", bg)
-    timeText.Size = UDim2.new(0, 400, 0, 30)
-    timeText.Position = UDim2.new(0.5, -200, 0.7, 40)
+    timeText.Size = UDim2.new(0, 450, 0, 30)
+    timeText.Position = UDim2.new(0.5, -225, 0.83, 0)
     timeText.BackgroundTransparency = 1
     timeText.Font = Enum.Font.SourceSans
-    timeText.TextSize = 14
-    timeText.TextColor3 = Color3.fromRGB(0, 0, 0)
+    timeText.TextSize = 18
+    timeText.TextColor3 = Color3.fromRGB(255, 255, 255)
     timeText.Text = "Estimated time: 180 seconds"
 
     local function getStatusMessage(progress)
