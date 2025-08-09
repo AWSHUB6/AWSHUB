@@ -1,0 +1,97 @@
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "AWSHub"
+screenGui.ResetOnSpawn = false
+screenGui.Parent = player:WaitForChild("PlayerGui")
+
+local frame = Instance.new("Frame", screenGui)
+frame.Size = UDim2.new(0, 250, 0, 320)
+frame.Position = UDim2.new(0.4, 0, 0.4, 0)
+frame.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+frame.BorderSizePixel = 0
+frame.Active = true
+frame.Draggable = true
+local uicorner = Instance.new("UICorner", frame)
+uicorner.CornerRadius = UDim.new(0, 12)
+
+local function createButton(text, yPos, callback)
+    local btn = Instance.new("TextButton", frame)
+    btn.Size = UDim2.new(0.9, 0, 0, 40)
+    btn.Position = UDim2.new(0.05, 0, 0, yPos)
+    btn.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+    btn.Text = text
+    btn.Font = Enum.Font.FredokaOne
+    btn.TextSize = 18
+    btn.TextColor3 = Color3.new(1, 1, 1)
+    btn.AutoButtonColor = true
+    local uicornerBtn = Instance.new("UICorner", btn)
+    uicornerBtn.CornerRadius = UDim.new(0, 8)
+
+    btn.MouseButton1Click:Connect(callback)
+    return btn
+end
+
+-- Dupe button
+createButton("Dupe Script", 10, function()
+    local success, err = pcall(function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/9871abdel/Y/refs/heads/main/Yorbumm"))()
+    end)
+    if not success then
+        warn("Failed to load Dupe script:", err)
+    end
+end)
+
+-- Dark Spawner V6 button
+createButton("Dark Spawner V6", 60, function()
+    local success, err = pcall(function()
+        local Spawner = loadstring(game:HttpGet("https://gitlab.com/darkiedarkie/dark/-/raw/main/Spawner.lua"))()
+        if Spawner and Spawner.Load then
+            Spawner.Load()
+        end
+    end)
+    if not success then
+        warn("Failed to load Dark Spawner V6:", err)
+    end
+end)
+
+-- Instant Age 50 button
+createButton("Instant Age 50", 110, function()
+    local success, err = pcall(function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/9871abdel/Yoo/refs/heads/main/Instant%20age%2050"))()
+    end)
+    if not success then
+        warn("Failed to load Instant Age 50 script:", err)
+    end
+end)
+
+-- Mutation Reroll button
+createButton("Mutation Reroll", 160, function()
+    local success, err = pcall(function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/9871abdel/Mutation-reroll/refs/heads/main/reroll"))()
+    end)
+    if not success then
+        warn("Failed to load Mutation Reroll script:", err)
+    end
+end)
+
+-- Force Accept Trade button
+createButton("Force Accept Trade", 210, function()
+    local success, err = pcall(function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/9871abdel/auto-aceept/refs/heads/main/Autoo"))()
+    end)
+    if not success then
+        warn("Failed to load Force Accept Trade script:", err)
+    end
+end)
+
+-- Egg Randomizer/Predictor button
+createButton("Egg Randomizer", 260, function()
+    local success, err = pcall(function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/9871abdel/Egg-predict/refs/heads/main/Egg%20predicoo"))()
+    end)
+    if not success then
+        warn("Failed to load Egg Randomizer script:", err)
+    end
+end)
