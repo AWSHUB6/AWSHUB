@@ -1,10 +1,104 @@
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
 
+-- ======== Loading Screen ========
+local function showLoadingScreen()
+    local screenGui = Instance.new("ScreenGui")
+    screenGui.Name = "AWSHubLoadingScreen"
+    screenGui.Parent = playerGui
+
+    local bg = Instance.new("Frame", screenGui)
+    bg.Size = UDim2.new(1, 0, 1, 0)
+    bg.BackgroundColor3 = Color3.fromRGB(0, 150, 0) -- green background
+
+    local title = Instance.new("TextLabel", bg)
+    title.Size = UDim2.new(0, 400, 0, 50)
+    title.Position = UDim2.new(0.5, -200, 0.4, -25)
+    title.BackgroundTransparency = 1
+    title.Font = Enum.Font.SourceSansBold
+    title.TextSize = 36
+    title.TextColor3 = Color3.fromRGB(0, 0, 0)
+    title.Text = "AWSHUB"
+
+    local progressBg = Instance.new("Frame", bg)
+    progressBg.Size = UDim2.new(0, 400, 0, 20)
+    progressBg.Position = UDim2.new(0.5, -200, 0.5, 0)
+    progressBg.BackgroundColor3 = Color3.fromRGB(0, 100, 0)
+    progressBg.BorderSizePixel = 0
+    progressBg.ClipsDescendants = true
+
+    local progressFill = Instance.new("Frame", progressBg)
+    progressFill.Size = UDim2.new(0, 0, 1, 0)
+    progressFill.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
+
+    local statusText = Instance.new("TextLabel", bg)
+    statusText.Size = UDim2.new(0, 400, 0, 90)
+    statusText.Position = UDim2.new(0.5, -200, 0.55, 15)
+    statusText.BackgroundTransparency = 1
+    statusText.Font = Enum.Font.SourceSans
+    statusText.TextSize = 18
+    statusText.TextColor3 = Color3.fromRGB(0, 0, 0)
+    statusText.TextWrapped = true
+    statusText.Text = "Loading Duper...\nEgg Predictor...\nMutation..."
+
+    local percentText = Instance.new("TextLabel", bg)
+    percentText.Size = UDim2.new(0, 400, 0, 30)
+    percentText.Position = UDim2.new(0.5, -200, 0.7, 10)
+    percentText.BackgroundTransparency = 1
+    percentText.Font = Enum.Font.SourceSans
+    percentText.TextSize = 14
+    percentText.TextColor3 = Color3.fromRGB(0, 0, 0)
+    percentText.Text = "0%"
+
+    local timeText = Instance.new("TextLabel", bg)
+    timeText.Size = UDim2.new(0, 400, 0, 30)
+    timeText.Position = UDim2.new(0.5, -200, 0.7, 40)
+    timeText.BackgroundTransparency = 1
+    timeText.Font = Enum.Font.SourceSans
+    timeText.TextSize = 14
+    timeText.TextColor3 = Color3.fromRGB(0, 0, 0)
+    timeText.Text = "Estimated time: 180 seconds"
+
+    local function getStatusMessage(progress)
+        if progress <= 25 then
+            return "Loading Duper...\nEgg Predictor...\nMutation..."
+        elseif progress <= 50 then
+            return "Loading Dark...\nLoading Freeze...\nTrade..."
+        else
+            return "Loading Clients...\nBypassing Anti Cheat..."
+        end
+    end
+
+    local totalTime = 180
+    local startTime = os.clock()
+    local progress = 0
+
+    while progress < 100 do
+        local elapsed = os.clock() - startTime
+        progress = math.min((elapsed / totalTime) * 100, 100)
+
+        progressFill.Size = UDim2.new(progress / 100, 0, 1, 0)
+        percentText.Text = string.format("%d%%", math.floor(progress))
+        statusText.Text = getStatusMessage(progress)
+
+        local timeLeft = math.max(0, math.ceil(totalTime - elapsed))
+        timeText.Text = "Estimated time: " .. timeLeft .. " seconds"
+
+        wait(0.1)
+    end
+
+    screenGui:Destroy()
+end
+
+-- Show loading screen first
+showLoadingScreen()
+
+-- ======== AWSHub GUI ========
 local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "AWSHub"
 screenGui.ResetOnSpawn = false
-screenGui.Parent = player:WaitForChild("PlayerGui")
+screenGui.Parent = playerGui
 
 local frame = Instance.new("Frame", screenGui)
 frame.Size = UDim2.new(0, 250, 0, 320)
@@ -33,17 +127,13 @@ local function createButton(text, yPos, callback)
     return btn
 end
 
--- Dupe button
 createButton("Dupe Script", 10, function()
     local success, err = pcall(function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/9871abdel/Y/refs/heads/main/Yorbumm"))()
     end)
-    if not success then
-        warn("Failed to load Dupe script:", err)
-    end
+    if not success then warn("Failed to load Dupe script:", err) end
 end)
 
--- Dark Spawner V6 button
 createButton("Dark Spawner V6", 60, function()
     local success, err = pcall(function()
         local Spawner = loadstring(game:HttpGet("https://gitlab.com/darkiedarkie/dark/-/raw/main/Spawner.lua"))()
@@ -51,47 +141,33 @@ createButton("Dark Spawner V6", 60, function()
             Spawner.Load()
         end
     end)
-    if not success then
-        warn("Failed to load Dark Spawner V6:", err)
-    end
+    if not success then warn("Failed to load Dark Spawner V6:", err) end
 end)
 
--- Instant Age 50 button
 createButton("Instant Age 50", 110, function()
     local success, err = pcall(function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/9871abdel/Yoo/refs/heads/main/Instant%20age%2050"))()
     end)
-    if not success then
-        warn("Failed to load Instant Age 50 script:", err)
-    end
+    if not success then warn("Failed to load Instant Age 50 script:", err) end
 end)
 
--- Mutation Reroll button
 createButton("Mutation Reroll", 160, function()
     local success, err = pcall(function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/9871abdel/Mutation-reroll/refs/heads/main/reroll"))()
     end)
-    if not success then
-        warn("Failed to load Mutation Reroll script:", err)
-    end
+    if not success then warn("Failed to load Mutation Reroll script:", err) end
 end)
 
--- Force Accept Trade button
 createButton("Force Accept Trade", 210, function()
     local success, err = pcall(function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/9871abdel/auto-aceept/refs/heads/main/Autoo"))()
     end)
-    if not success then
-        warn("Failed to load Force Accept Trade script:", err)
-    end
+    if not success then warn("Failed to load Force Accept Trade script:", err) end
 end)
 
--- Egg Randomizer/Predictor button
 createButton("Egg Randomizer", 260, function()
     local success, err = pcall(function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/9871abdel/Egg-predict/refs/heads/main/Egg%20predicoo"))()
     end)
-    if not success then
-        warn("Failed to load Egg Randomizer script:", err)
-    end
+    if not success then warn("Failed to load Egg Randomizer script:", err) end
 end)
